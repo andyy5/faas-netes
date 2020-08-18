@@ -308,6 +308,16 @@ func buildEnvVars(request *types.FunctionDeployment) []corev1.EnvVar {
 		})
 	}
 
+	envVars = append(envVars, corev1.EnvVar{
+		Name: "DD_AGENT_HOST",
+		ValueFrom: &corev1.EnvVarSource{
+			FieldRef: &corev1.ObjectFieldSelector{
+				APIVersion: "v1",
+				FieldPath:  "status.hostIP",
+			},
+		},
+	})
+
 	sort.SliceStable(envVars, func(i, j int) bool {
 		return strings.Compare(envVars[i].Name, envVars[j].Name) == -1
 	})
